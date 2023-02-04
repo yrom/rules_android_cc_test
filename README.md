@@ -41,7 +41,7 @@ git_repository(
 )
 ```
 
-`cc_test` target in `BUILD`:
+Declares `cc_test` target in `BUILD`:
 ```py
 load("@rules_android_cc_test//:defs.bzl", "cc_test")
 cc_test(
@@ -51,12 +51,21 @@ cc_test(
 )
 
 ```
-Run test on Android:
+...it will auto declares android target suffix with `_android`: `//:samples_android`
+
+```sh
+bazel query //:all
+#//:samples
+#//:samples_android
+#Loading: 0 packages loaded
+```
+
+Run cc_test on Android:
 ```sh
 bazel run  \
     --crosstool_top=//external:android/crosstool \
     --host_crosstool_top=@bazel_tools//tools/cpp:toolchain \
     --cpu=<abi> \
     -- \
-    //:samples [options]
+    //:samples_android [options]
 ```

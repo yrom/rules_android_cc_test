@@ -31,6 +31,7 @@ def _cc_test(
 
     native.sh_test(
         name = name + "_android",
+        size = size,
         srcs = [
             "@rules_android_cc_test//:android_cc_test_wrapper.sh"
         ],

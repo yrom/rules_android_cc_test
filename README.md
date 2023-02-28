@@ -14,8 +14,9 @@ bazel run  \
     --crosstool_top=//external:android/crosstool \
     --host_crosstool_top=@bazel_tools//tools/cpp:toolchain \
     --cpu=x86_64 \
+    //:gtest_samples_android \
     -- \
-    //:gtest_samples_android --gtest_color=yes
+    --gtest_color=yes
 ```
 
 
@@ -38,6 +39,7 @@ android_ndk_repository(
 git_repository(
     name = "rules_android_cc_test",
     remote = "https://github.com/yrom/rules_android_cc_test.git",
+    branch = "main",
 )
 ```
 
@@ -66,6 +68,7 @@ bazel run  \
     --crosstool_top=//external:android/crosstool \
     --host_crosstool_top=@bazel_tools//tools/cpp:toolchain \
     --cpu=<abi> \
+    //:samples_android \
     -- \
-    //:samples_android [options]
+    [options]
 ```

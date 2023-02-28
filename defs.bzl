@@ -29,45 +29,21 @@ def _cc_test(
         **kargs
     )
 
-    android_executable(
+    native.sh_test(
         name = name + "_android",
-        target = name,
-        testonly = 1,
-    )
-
-def _android_executable(ctx):
-    runfiles = ctx.runfiles(
-        files = ctx.files.target + [
-            ctx.executable._adb,
+        srcs = [
+            "@rules_android_cc_test//:android_cc_test_wrapper.sh"
         ],
+        args = [
+            "$(location :{})".format(name),
+            "--adb", "$(execpath @androidsdk//:adb)",
+            "--",
+        ],
+        data = [
+            ":"+name,
+            "@androidsdk//:adb",
+        ],
+        tags = ["manual"],
     )
-    script = ctx.actions.declare_file(ctx.label.name + ".sh")
-    ctx.actions.expand_template(
-        output = script,
-        is_executable = True,
-        template = ctx.file._template,
-        substitutions = {
-            "{adb}": str(ctx.executable._adb.path),
-            "{name}": str(ctx.attr.target.label.name),
-        },
-    )
-    return [
-        DefaultInfo(runfiles = runfiles, executable = script),
-    ]
-
-android_executable = rule(
-    attrs = {
-        "target": attr.label(),
-        "_template": attr.label(allow_single_file = True, default = "android_cc_test.sh.tpl"),
-        "_adb": attr.label(
-            default = Label("@androidsdk//:adb"),
-            allow_single_file = True,
-            executable = True,
-            cfg = "exec",
-        ),
-    },
-    executable = True,
-    implementation = _android_executable,
-)
 
 cc_test = _cc_test

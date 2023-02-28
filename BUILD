@@ -1,4 +1,4 @@
-exports_files(glob(["*.bzl"]) + ["android_cc_test.sh.tpl"])
+exports_files(glob(["*.bzl"]) + ["android_cc_test_wrapper.sh"])
 
 config_setting(
     name = "android",

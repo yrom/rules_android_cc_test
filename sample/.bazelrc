@@ -1,2 +1,1 @@
-build:android --crosstool_top=//external:android/crosstool
-build:android --host_crosstool_top=@bazel_tools//tools/cpp:toolchain
+

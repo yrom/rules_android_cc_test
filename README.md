@@ -11,9 +11,8 @@ cd sample
 $ANDROID_HOME/emulator/emulator -avd {AVDNAME}
 
 bazel run  \
-    --crosstool_top=//external:android/crosstool \
-    --host_crosstool_top=@bazel_tools//tools/cpp:toolchain \
-    --cpu=x86_64 \
+    --platforms=@rules_android_cc_test//:android_arm64-v8a \
+    --config=android \
     //:gtest_samples_android \
     -- \
     --gtest_color=yes
@@ -29,11 +28,12 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 android_sdk_repository(
     name = "androidsdk",
-    api_level = 28,
+    api_level = 33,
 )
 
 android_ndk_repository(
-    name = "androidndk"
+    name = "androidndk",
+    api_level = 21
 )
 
 git_repository(
@@ -65,10 +65,11 @@ bazel query //:all
 Run cc_test on Android:
 ```sh
 bazel run  \
-    --crosstool_top=//external:android/crosstool \
-    --host_crosstool_top=@bazel_tools//tools/cpp:toolchain \
-    --cpu=<abi> \
+    --platforms=@rules_android_cc_test//:android_<cpu_abi> \
     //:samples_android \
     -- \
     [options]
 ```
+
+- cpu_abi: `arm64-v8a`, `x86_64`
+- options: opts of samples_android, e.g. `--gtest_color=yes`, `--gtest_filter=TestSuite.TestName`

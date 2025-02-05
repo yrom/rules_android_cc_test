@@ -7,12 +7,11 @@ Sample codes for running cc_test on Android devices.
 
 cd sample
 
-#launch android emulator
+#launch android emulator (use arm64-v8a in this case)
 $ANDROID_HOME/emulator/emulator -avd {AVDNAME}
 
 bazel run  \
     --platforms=@rules_android_cc_test//:android_arm64-v8a \
-    --config=android \
     //:gtest_samples_android \
     -- \
     --gtest_color=yes

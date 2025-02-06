@@ -38,5 +38,7 @@ if [[ ! -x "$adb" ]]; then
     exit 1
 fi
 pwd
+device=`$adb shell getprop ro.product.device`
+echo "Run $file_name on $device..."
 $adb push $local_file $remote_file
 $adb shell "chmod a+x $remote_file; $remote_file ${APP_ARGS[@]}; rm ${remote_file}"

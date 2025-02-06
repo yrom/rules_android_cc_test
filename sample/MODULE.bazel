@@ -9,3 +9,23 @@ bazel_dep(name = "rules_android_cc_test", version = "0.0.1")
 local_path_override(module_name="rules_android_cc_test", path="../")
 
 bazel_dep(name = "googletest", version = "1.15.2")
+
+# required for using ndk r25
+bazel_dep(name = "rules_android_ndk", version = "0.1.3")
+bazel_dep(name = "rules_android", version = "0.6.0")
+
+android_ndk_repository_extension = use_extension("@rules_android_ndk//:extension.bzl", "android_ndk_repository_extension")
+android_ndk_repository_extension.configure(api_level = 21) # compile api level
+use_repo(android_ndk_repository_extension, "androidndk")
+
+register_toolchains("@androidndk//:all")
+
+register_toolchains(
+    "@rules_android//toolchains/android:android_default_toolchain",
+    "@rules_android//toolchains/android_sdk:android_sdk_tools",
+)
+
+android_sdk_repository_extension = use_extension("@rules_android//rules/android_sdk_repository:rule.bzl", "android_sdk_repository_extension")
+use_repo(android_sdk_repository_extension, "androidsdk")
+
+register_toolchains("@androidsdk//:sdk-toolchain", "@androidsdk//:all")
